@@ -128,6 +128,7 @@ export default {
 			white-space: nowrap
 			text-overflow: ellipsis
 			overflow: hidden
+			position: relative
 			.bulletin-title
 				display: inline-block
 				bg-image('bulletin')
@@ -138,6 +139,11 @@ export default {
 			.bulletin-text
 				font-size: 10px
 				margin-left: 4px
+			.icon-keyboard_arrow_right
+				position: absolute
+				right: 12px
+				top: 8px
+				font-size: 10px
 	
 						
 
