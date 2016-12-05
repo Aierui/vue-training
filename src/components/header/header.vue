@@ -142,7 +142,6 @@ export default {
 			.icon-keyboard_arrow_right
 				position: absolute
 				right: 12px
-				
 				top: 8px
 				font-size: 10px
 	
