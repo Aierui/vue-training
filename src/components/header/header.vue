@@ -12,7 +12,7 @@
 			<div class="description">
 				<span class="description">{{ seller.description }}/{{ seller.deliveryTime }}分钟送达</span>
 			</div>
-			<div class="supports" v-if="seller.supports">
+			<div class="supports" v-if="seller.supports" v-on:click="showDetail">
 				<span class="icon" v-bind:class="classMap[seller.supports[0].type]"></span>
 				<span class="description">{{ seller.supports[0].description}}</span>
 			</div>
@@ -22,11 +22,15 @@
 			<i class="icon-keyboard_arrow_right"></i>
 		</div>
 	</div>
-	<div class="bulletin-wrapper">
+	<div class="bulletin-wrapper" v-on:click="showDetail">
 		<span class="bulletin-title"></span>
 		<span class="bulletin-text">{{ seller.bulletin}}</span>
 		<i class="icon-keyboard_arrow_right"></i>
 	</div>
+	<div class="background">
+		<img v-bind:src="seller.avatar" width="100%" height="100%">
+	</div>
+	<div class="detail" v-show="detailShow"></div>
 </div>
   
 </template>
@@ -37,6 +41,16 @@ export default {
     seller: {
       type: Object
 		}
+	},
+	data () {
+		return {
+			detailShow: false
+		}
+	},
+	methods: {
+			showDetail() {
+				this.detailShow = true
+			}
 	},
 	created () {
 		this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
@@ -49,6 +63,8 @@ export default {
 	.header
 		color: #fff
 		background: rgba(7,17,27,.5)
+		position: relative
+		overflow: hidden
 		.content-wrapper
 			position: relative
 			padding: 24px 12px 18px 24px
@@ -139,11 +155,31 @@ export default {
 			.bulletin-text
 				font-size: 10px
 				margin-left: 4px
+				vertical-align: top
 			.icon-keyboard_arrow_right
 				position: absolute
 				right: 12px
 				top: 8px
 				font-size: 10px
+		.background
+			position: absolute
+			top: 0
+			left: 0
+			width: 100%
+			height: 100%
+			z-index: -1
+			filter: blur(10px)
+		.detail
+			position:	fixed
+			top: 0
+			left: 0
+			width: 100%
+			height: 100%
+			z-index: 99
+			background: rgba(7,17,27,.8)
+			filter: blur(10px)
+
+
 	
 						
 
