@@ -50,6 +50,9 @@ export default {
 	methods: {
 			showDetail() {
 				this.detailShow = true
+			},
+			errno () {
+				no
 			}
 	},
 	created () {
