@@ -30,7 +30,16 @@
 	<div class="background">
 		<img v-bind:src="seller.avatar" width="100%" height="100%">
 	</div>
-	<div class="detail" v-show="detailShow"></div>
+	<div class="detail" v-show="detailShow">
+		<div class="detail-wrapper clearfix">
+			<div class="detail-main">
+				<p>{{ seller.bulletin }}</p>
+			</div>
+		</div>
+			<div class="detail-close">
+				<i class="icon-close"></i>
+			</div>
+	</div>
 </div>
   
 </template>
@@ -50,9 +59,6 @@ export default {
 	methods: {
 			showDetail() {
 				this.detailShow = true
-			},
-			errno () {
-				no
 			}
 	},
 	created () {
@@ -179,8 +185,25 @@ export default {
 			width: 100%
 			height: 100%
 			z-index: 99
+			overflow: auto
 			background: rgba(7,17,27,.8)
-			filter: blur(10px)
+			// filter: blur(10px)
+			.detail-wrapper
+				min-height: 100%
+				width: 100%
+				.detail-main
+					margin-top: 64px
+					padding-bottom: 64px
+			.detail-close
+				position: relative
+				width: 32px
+				height: 32px
+				clear: both
+				margin: -32px auto 0
+				font-size: 32px
+				color: rgba(255,255,255,.5)
+
+
 
 
 	
