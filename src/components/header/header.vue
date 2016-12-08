@@ -12,7 +12,7 @@
 			<div class="description">
 				<span class="description">{{ seller.description }}/{{ seller.deliveryTime }}分钟送达</span>
 			</div>
-			<div class="supports" v-if="seller.supports" v-on:click="showDetail">
+			<div v-on:click="showDetail" class="supports" v-if="seller.supports">
 				<span class="icon" v-bind:class="classMap[seller.supports[0].type]"></span>
 				<span class="description">{{ seller.supports[0].description}}</span>
 			</div>
@@ -140,7 +140,7 @@ export default {
 				font-size: 10px
 				line-height: 12px
 				background: rgba(0,0,0,.2)
-				border-radius: 8px
+				border-radius: 20px
 				.count
 					vertical-align: top
 				.icon-keyboard_arrow_right
