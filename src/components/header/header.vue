@@ -12,12 +12,12 @@
 			<div class="description">
 				<span class="description">{{ seller.description }}/{{ seller.deliveryTime }}分钟送达</span>
 			</div>
-			<div v-on:click="showDetail" class="supports" v-if="seller.supports">
+			<div class="supports" v-if="seller.supports">
 				<span class="icon" v-bind:class="classMap[seller.supports[0].type]"></span>
 				<span class="description">{{ seller.supports[0].description}}</span>
 			</div>
 		</div>
-		<div class="supports-content" v-if="seller.supports">
+		<div v-on:click="showDetail" class="supports-content" v-if="seller.supports">
 			<span class="count">{{ seller.supports.length}}个</span>
 			<i class="icon-keyboard_arrow_right"></i>
 		</div>
@@ -33,10 +33,33 @@
 	<div class="detail" v-show="detailShow">
 		<div class="detail-wrapper clearfix">
 			<div class="detail-main">
-				<p>{{ seller.bulletin }}</p>
+				<h1 class="detail-name">{{ seller.name }}</h1>
+				<div class="detail-star">
+					
+				</div>
+				<div class="title">
+          <div class="line"></div>
+          <div class="text">优惠信息</div>
+          <div class="line"></div>
+				</div>
+				<ul class="detail-list">
+					<li v-for="item in seller.supports" class="supports-item">
+						<span class="icon" v-bind:class="classMap[item.type]"></span>
+						<span class="description">{{ item.description }}</span>
+					</li>
+				</ul>
+				<div class="title">
+					<div class="line"></div>
+          <div class="text">商家公告</div>
+          <div class="line"></div>
+				</div>
+				<div class="detail-info">
+					<p class="detail-info-content">{{ seller.bulletin }}</p>	
+				</div>
+				
 			</div>
 		</div>
-			<div class="detail-close">
+			<div class="detail-close" @click="closeDetail">
 				<i class="icon-close"></i>
 			</div>
 	</div>
@@ -59,6 +82,9 @@ export default {
 	methods: {
 			showDetail() {
 				this.detailShow = true
+			},
+			closeDetail () {
+				this.detailShow = false
 			}
 	},
 	created () {
@@ -187,13 +213,71 @@ export default {
 			z-index: 99
 			overflow: auto
 			background: rgba(7,17,27,.8)
-			// filter: blur(10px)
+			transition: all 0.5s
+			-webkit-transition: all .5s
 			.detail-wrapper
 				min-height: 100%
 				width: 100%
 				.detail-main
 					margin-top: 64px
 					padding-bottom: 64px
+					margin-left: 36px
+					margin-right: 36px
+					.detail-name
+						text-align: center
+						font-size: 16px
+						line-height: 16px
+						font-weight: 700
+						display: block
+					.title
+						display: flex
+						width: 80%
+						margin: 28px auto 24px auto
+						.line
+							flex: 1
+							position: relative
+							top: -6px
+							border-bottom: 1px solid rgba(255,255,255,.2)
+						.text
+							padding: 0 12px
+							font-weight: 700
+							font-size: 14px
+					.detail-list
+						margin-top: 24px
+						margin-left: 12px
+						.supports-item
+							font-size: 12px
+							font-weight: 200
+							line-height: 16px
+							margin-bottom: 12px
+							.icon
+								display: inline-block
+								width: 16px
+								height: 16px
+								line-height: 12px
+								background-repeat: no-repeat
+								background-size: 16px 16px
+								&.decrease
+									bg-image('decrease_2')
+								&.discount
+									bg-image('discount_2')
+								&.guarantee
+									bg-image('guarantee_2')
+								&.invoice
+									bg-image('invoice_2')
+								&.special
+									bg-image('special_2')
+							.description
+								vertical-align: top
+								margin-left: 6px
+					.detail-info
+						width: 100%
+						.detail-info-content
+							margin-left: 12px
+							margin-right: 12px
+							font-size: 12px
+							font-weight: 200
+							line-height: 24px
 			.detail-close
 				position: relative
 				width: 32px
