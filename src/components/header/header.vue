@@ -35,7 +35,11 @@
 			<div class="detail-main">
 				<h1 class="detail-name">{{ seller.name }}</h1>
 				<div class="detail-star">
-					
+					<span></span>	
+					<span></span>	
+					<span></span>	
+					<span></span>	
+					<span></span>	
 				</div>
 				<div class="title">
           <div class="line"></div>
