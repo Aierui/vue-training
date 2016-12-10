@@ -60,12 +60,11 @@
 				<div class="detail-info">
 					<p class="detail-info-content">{{ seller.bulletin }}</p>	
 				</div>
-				
 			</div>
 		</div>
-			<div class="detail-close" @click="closeDetail">
-				<i class="icon-close"></i>
-			</div>
+		<div class="detail-close" @click="closeDetail">
+			<i class="icon-close"></i>
+		</div>
 	</div>
 </div>
   
