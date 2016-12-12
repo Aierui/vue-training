@@ -36,7 +36,7 @@
 				<h1 class="detail-name">{{ seller.name }}</h1>
 				<div class="detail-star">
 					<div v-if="seller.pics"  style="display: inline-block;text-align: center;margin-top: 30px"> 
-						<img v-for="item in seller.pics" :src="item" alt="">
+						<img v-for="item in seller.pics" :src="item">
 					</div>					
 				</div>
 				<div class="title">
