@@ -34,15 +34,13 @@
 		<div class="detail-wrapper clearfix">
 			<div class="detail-main">
 				<h1 class="detail-name">{{ seller.name }}</h1>
-				<div class="detail-star">
-					<div v-if="seller.pics"  style="display: inline-block;text-align: center;margin-top: 30px"> 
-						<img v-for="item in seller.pics" :src="item">
-					</div>					
+				<div class="start-wrapper">
+					<start :size="48" :score="seller.score"></start>
 				</div>
 				<div class="title">
-          <div class="line"></div>
-          <div class="text">优惠信息</div>
-          <div class="line"></div>
+		          <div class="line"></div>
+		          <div class="text">优惠信息</div>
+		          <div class="line"></div>
 				</div>
 				<ul class="detail-list">
 					<li v-for="item in seller.supports" class="supports-item">
@@ -51,9 +49,9 @@
 					</li>
 				</ul>
 				<div class="title">
-					<div class="line"></div>
-          <div class="text">商家公告</div>
-          <div class="line"></div>
+				  <div class="line"></div>
+		          <div class="text">商家公告</div>
+		          <div class="line"></div>
 				</div>
 				<div class="detail-info">
 					<p class="detail-info-content">{{ seller.bulletin }}</p>	
@@ -69,6 +67,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import start from 'components/start/start'
 export default {
   props: {
     seller: {
@@ -90,6 +89,9 @@ export default {
 	},
 	created () {
 		this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+	},
+	components: {
+		'start': start
 	}
 }
 </script>
@@ -230,6 +232,10 @@ export default {
 						line-height: 16px
 						font-weight: 700
 						display: block
+					.start-wrapper
+						margin-top: 16px
+						margin-bottom: 28px;
+						text-align: center
 					.title
 						display: flex
 						width: 80%
