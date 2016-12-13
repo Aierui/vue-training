@@ -23,7 +23,7 @@ export default {
 		starType() {
 			return 'star-' + this.size
 		},
-		itemClasses() {
+		itemClasses: function() {
 			let result = []
 			let score = Math.floor(this.score * 2) / 2
 			let hasDecimal = score % 1 !== 0
