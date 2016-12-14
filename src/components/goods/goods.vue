@@ -1,19 +1,19 @@
 <template>
 <div class="goods">
-	<div class="menu-wrapper">
-		<ul style="transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+	<div class="menu-wrapper" ref="menuWrapper">
+		<ul>
 			<li v-for="item in goods" class="menu-item">
 				<span class="text border-1px">
-					<span v-show="item.type>-1" class="icon" :class="classMap[item.type]"></span>{{ item.name}}</span>
+					<span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{ item.name}}</span>
 			</li>
 		</ul>
 	</div>
-	<div class="foods-wrapper">
-		<ul style="transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+	<div class="foods-wrapper" ref="foodsWrapper">
+		<ul>
 			<li v-for="item in goods" class="foods-list">
 				<h1 class="title">{{ item.name }}</h1>
 				<ul>
-					<li v-for="food in item.foods" class="food-item">
+					<li v-for="food in item.foods" class="food-item border-1px">
 						<div class="icon">
 							<img :src="food.icon" width="57" height="57">
 						</div>
@@ -40,6 +40,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+import BScroll from 'better-scroll'
+
 const ERR_OK = 0
 export default {
 	data () {
@@ -52,10 +54,19 @@ export default {
       response = response.body
       if (response.errno === ERR_OK) {
         this.goods = response.data
-        console.log(this.goods)
+        this.$nextTick(function () {
+          this._initBscroll()
+        })
       }
     })
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+	},
+	methods: {
+		_initBscroll () {
+			console.log(this.$refs.menuWrapper)
+			this.menuBscroll = new BScroll(this.$refs.menuWrapper, {})
+			this.foodsBscroll = new BScroll(this.$refs.foodsWrapper, {})
+		}
 	}
 }
 </script>
@@ -87,6 +98,23 @@ export default {
 					color: rgb(77, 85, 93)
 					line-height: 14px
 					border-1px(rgba(7,17,27,.1))
+					.icon
+						display: inline-block
+						width: 12px
+						height: 12px
+						line-height: 12px
+						background-repeat: no-repeat
+						background-size: 12px 12px
+						&.decrease
+							bg-image('decrease_3')
+						&.discount
+							bg-image('discount_3')
+						&.guarantee
+							bg-image('guarantee_3')
+						&.invoice
+							bg-image('invoice_3')
+						&.special
+							bg-image('special_3')
 		.foods-wrapper
 			flex: 1
 			.title
@@ -102,6 +130,7 @@ export default {
 				margin: 18px
 				padding-bottom: 18px
 				position: relative
+				border-1px(rgba(7,17,27,.1))
 				.icon
 					flex: 0 0 57px
 					margin-right: 10px
@@ -135,8 +164,6 @@ export default {
 							text-decoration: line-through
 							font-size: 10px
 							color: #92999f
-							
-
 
 
  
