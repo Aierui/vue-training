@@ -28,14 +28,16 @@
 								<span class="now">¥{{food.price}}</span>
 								<span class="old" v-if="food.oldPrice">¥{{food.oldPrice}}</span>
 							</div>
-							<div class="cart-wrapper"></div>	
+							<div class="cartcontrol-wrapper">
+								<cartcontrol :food="food"></cartcontrol>
+							</div>	
 						</div>
 					</li>
 				</ul>
 			</li>
 		</ul>
 	</div>
-	<shopcart></shopcart>
+	<shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
 </div>
 
 </template>
@@ -43,9 +45,15 @@
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
 import shopcart from 'components/shopcart/shopcart'
+import cartcontrol from 'components/cartcontrol/cartcontrol'
 
 const ERR_OK = 0
 export default {
+	props: {
+		seller: {
+			type: Object
+		}
+	},
 	data () {
 		return {
 			goods: [],
@@ -81,8 +89,7 @@ export default {
 	methods: {
 		selectMenu (index, $event) {
 			if (!$event._constructed) {
-				console.log(100)
-				// return
+				return
 			}
 			let foodList = this.$refs.foodsWrapper.getElementsByClassName('foods-list-hook')
 			let el = foodList[index]
@@ -95,6 +102,7 @@ export default {
 				cancelable: true
 			})
 			this.foodsBscroll = new BScroll(this.$refs.foodsWrapper, {
+				click: true,
 				probeType: 3
 			})
 			this.foodsBscroll.on('scroll', (pos) => {
@@ -113,7 +121,8 @@ export default {
 		}
 	},
 	components: {
-		shopcart
+		shopcart,
+		cartcontrol
 	}
 }
 </script>
@@ -217,6 +226,10 @@ export default {
 							text-decoration: line-through
 							font-size: 10px
 							color: #92999f
+					.cartcontrol-wrapper
+						position: absolute
+						right: 0
+						bottom: 12px
 
 
  
