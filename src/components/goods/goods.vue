@@ -2,7 +2,7 @@
 <div class="goods">
 	<div class="menu-wrapper" ref="menuWrapper">
 		<ul>
-			<li v-for="item in goods" class="menu-item">
+			<li v-for="(item, index) in goods" class="menu-item" :class="{'current':currentIndex === index}">
 				<span class="text border-1px">
 					<span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{ item.name}}</span>
 			</li>
@@ -10,7 +10,7 @@
 	</div>
 	<div class="foods-wrapper" ref="foodsWrapper">
 		<ul>
-			<li v-for="item in goods" class="foods-list">
+			<li v-for="item in goods" class="foods-list foods-list-hook">
 				<h1 class="title">{{ item.name }}</h1>
 				<ul>
 					<li v-for="food in item.foods" class="food-item border-1px">
@@ -46,7 +46,9 @@ const ERR_OK = 0
 export default {
 	data () {
 		return {
-			goods: []
+			goods: [],
+			listHeight: [],
+			scrollY: 0
 		}
 	},
 	created () {
@@ -56,16 +58,43 @@ export default {
         this.goods = response.data
         this.$nextTick(function () {
           this._initBscroll()
+          this.calcHeight()
         })
       }
     })
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
 	},
+	computed: {
+		currentIndex() {
+			for (let i = 0; i < this.listHeight.length; i++) {
+				let height1 = this.listHeight[i]
+				let height2 = this.listHeight[i + 1]
+				if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+					return i
+				}
+			}
+			return 0
+		}
+	},
 	methods: {
 		_initBscroll () {
-			console.log(this.$refs.menuWrapper)
 			this.menuBscroll = new BScroll(this.$refs.menuWrapper, {})
-			this.foodsBscroll = new BScroll(this.$refs.foodsWrapper, {})
+			this.foodsBscroll = new BScroll(this.$refs.foodsWrapper, {
+				probeType: 3
+			})
+			this.foodsBscroll.on('scroll', (pos) => {
+			this.scrollY = Math.abs(Math.round(pos.y))
+			})
+		},
+		calcHeight () {
+		  let foodList = this.$refs.foodsWrapper.getElementsByClassName('foods-list-hook')
+		  let height = 0
+		  this.listHeight.push(height)
+		  for (let i = 0; i < foodList.length; i++) {
+		    let item = foodList[i]
+		    height += item.clientHeight
+		    this.listHeight.push(height)
+		  }
 		}
 	}
 }
@@ -90,6 +119,12 @@ export default {
 				width: 56px
 				padding: 0 12px
 				line-height: 14px
+				&.current
+					position: relative
+					margin-top: -1px
+					background: #fff
+					font-weight: 700
+					z-index: 10
 				.text
 					display: table-cell
 					vertical-align: middle
