@@ -12,6 +12,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Vue from 'vue'
+let eventHub = new Vue()
 export default {
 	props: {
 		food: {
@@ -28,6 +30,8 @@ export default {
 			} else {
 				this.food.count ++
 			}
+			// console.log($event)// 分发
+			eventHub.$emit('add-cart', $event.target)
 		},
 		deCart($event) {
 			if (!$event._constructed) {

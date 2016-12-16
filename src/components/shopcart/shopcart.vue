@@ -14,6 +14,12 @@
 	<div class="content-right">
 		<div class="pay" :class="payClass">{{ payDesc }}</div>
 	</div>
+	<div class="balls-wrapper">
+		<transition-group name="drop">
+			<div v-for="ball in balls" v-bind:key="ball" v-show="ball.show" class="ball"></div>
+			<div class="inner"></div>
+		</transition-group>
+	</div>
 </div>
 </div>
   
@@ -22,7 +28,25 @@
 <script type="text/ecmascript-6">
 export default {
 	data() {
-		return {}
+		return {
+			balls: [
+				{
+					show: false
+				},
+				{
+					show: false
+				},
+				{
+					show: false
+				},
+				{
+					show: false
+				},
+				{
+					show: false
+				}
+			]
+		}
 	},
 	props: {
 		selectFoods: {
@@ -74,6 +98,11 @@ export default {
 			} else {
 				return 'enough'
 			}
+		}
+	},
+	methods: {
+		drop () {
+
 		}
 	}
 }
@@ -166,6 +195,17 @@ export default {
 	 				color: #fff
 	 			&.not-enough
 	 				background: #2b333b
+	 	// .balls-wrapper
+	 	// 	.ball
+		 // 		position: fixed
+		 // 		left: 32px
+		 // 		bottom: 22px
+		 // 		z-index: 200
+		 // 		&.drop-enter-active
+		 // 			transition: all .4s
+		 // 			.inner
+
+
 			
 
 

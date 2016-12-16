@@ -46,7 +46,8 @@
 import BScroll from 'better-scroll'
 import shopcart from 'components/shopcart/shopcart'
 import cartcontrol from 'components/cartcontrol/cartcontrol'
-
+import Vue from 'vue'
+let eventHub = new Vue()
 const ERR_OK = 0
 export default {
 	props: {
@@ -73,6 +74,8 @@ export default {
       }
     })
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+    // 监听add-cart
+    eventHub.$on('add-cart', this._drop)
 	},
 	computed: {
 		currentIndex() {
@@ -118,6 +121,9 @@ export default {
 		    height += item.clientHeight
 		    this.listHeight.push(height)
 		  }
+		},
+		_drop ($event) {
+				console.log($event)
 		}
 	},
 	components: {
