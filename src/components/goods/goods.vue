@@ -37,7 +37,7 @@
 			</li>
 		</ul>
 	</div>
-	<shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+	<shopcart ref="shopcart" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" @add-cart="_drop($event)"></shopcart>
 </div>
 
 </template>
@@ -46,8 +46,8 @@
 import BScroll from 'better-scroll'
 import shopcart from 'components/shopcart/shopcart'
 import cartcontrol from 'components/cartcontrol/cartcontrol'
-import Vue from 'vue'
-let eventHub = new Vue()
+// import Vue from 'vue'
+// let eventHub = new Vue()
 const ERR_OK = 0
 export default {
 	props: {
@@ -75,7 +75,7 @@ export default {
     })
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     // 监听add-cart
-    eventHub.$on('add-cart', this._drop)
+    // this.$on('add-cart', this._drop)
 	},
 	computed: {
 		currentIndex() {
@@ -88,6 +88,9 @@ export default {
 			}
 			return 0
 		}
+	},
+	beforeDestroy () {
+		// this.$off('add-cart', this._drop)
 	},
 	methods: {
 		selectMenu (index, $event) {
@@ -123,7 +126,9 @@ export default {
 		  }
 		},
 		_drop ($event) {
-				console.log($event)
+			console.log($event)
+			this.$refs.shopcart.drop($event.target)
+				// console.log($event)
 		}
 	},
 	components: {

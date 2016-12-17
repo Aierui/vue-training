@@ -15,9 +15,10 @@
 		<div class="pay" :class="payClass">{{ payDesc }}</div>
 	</div>
 	<div class="balls-wrapper">
-		<transition-group name="drop">
-			<div v-for="ball in balls" v-bind:key="ball" v-show="ball.show" class="ball"></div>
-			<div class="inner"></div>
+		<transition-group name="drop" tag="div">
+			<div v-for="(ball, index) in balls" :key="index" v-show="ball.show" class="ball">
+				<div class="inner"></div>
+			</div>
 		</transition-group>
 	</div>
 </div>
@@ -52,10 +53,7 @@ export default {
 		selectFoods: {
 			type: Array,
 			default() {
-				return [{
-					price: 12,
-					count: 1
-				}]
+				return []
 			}
 		},
 		deliveryPrice: {
@@ -101,8 +99,8 @@ export default {
 		}
 	},
 	methods: {
-		drop () {
-
+		drop (el) {
+			console.log(el)
 		}
 	}
 }
