@@ -138,8 +138,10 @@ export default {
 		  }
 		},
 		_drop ($event) {
-			// console.log($event)
-			this.$refs.shopcart.drop($event)
+			// 优化小球下落
+			this.$nextTick(() => {
+				this.$refs.shopcart.drop($event)
+			})
 		}
 	},
 	components: {

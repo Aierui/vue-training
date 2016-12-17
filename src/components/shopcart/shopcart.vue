@@ -16,15 +16,9 @@
 	</div>
 	<div class="balls-wrapper">
 		<transition-group name="drop" tag="div" v-on:before-enter="beforeEnter"
-  v-on:enter="enter"
-  v-on:after-enter="afterEnter"
-  v-on:enter-cancelled="enterCancelled"
-  v-on:before-leave="beforeLeave"
-  v-on:leave="leave"
-  v-on:after-leave="afterLeave"
-  v-on:leave-cancelled="leaveCancelled">
+  v-on:enter="enter" v-on:after-enter="afterEnter" v-on:enter-cancelled="enterCancelled">
 			<div v-for="(ball, index) in balls" :key="index" v-show="ball.show" class="ball">
-				<div class="inner"></div>
+				<div class="inner inner-hook"></div>
 			</div>
 		</transition-group>
 	</div>
@@ -120,37 +114,43 @@ export default {
 			}
 		},
 		beforeEnter: function (el) {
+			let count = this.balls.length
+			while (count--) {
+				let ball = this.balls[count]
+				if (ball.show) {
+					let rect = ball.el.getBoundingClientRect()
+					// console.log(rect)
+					let x = rect.left - 32
+					let y = -(window.innerHeight - rect.top - 22)
+					el.style.display = ''
+					el.style.transform = `translate3d(0, ${y}px, 0)`
+					el.style.webkitTransform = `translate3d(0, ${y}px, 0)`
+					let inner = el.getElementsByClassName('inner-hook')[0]
+					inner.style.transform = `translate3d(${x}px, 0, 0)`
+					inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`
+					this.$nextTick(function() {
+								el.style.transform = 'translate3d(0, 0, 0)'
+								el.style.webkitTransform = 'translate3d(0, 0, 0)'
+								let inner = el.getElementsByClassName('inner-hook')[0]
+								inner.style.transform = 'translate3d(0, 0, 0)'
+								inner.style.webkitTransform = 'translate3d(0, 0, 0)'
+					})
+				}
+			}
 	    // ...
 	  },
-	  // 此回调函数是可选项的设置
-	  // 与 CSS 结合时使用
 	  enter: function (el, done) {
-	    // ...
 	    done()
 	  },
 	  afterEnter: function (el) {
-	    // ...
+console.log(el)
+      let ball = this.dropBalls.shift()
+	    if (ball) {
+	      ball.show = false
+	      el.style.display = 'none'
+      }
 	  },
 	  enterCancelled: function (el) {
-	    // ...
-	  },
-	  // --------
-	  // 离开时
-	  // --------
-	  beforeLeave: function (el) {
-	    // ...
-	  },
-	  // 此回调函数是可选项的设置
-	  // 与 CSS 结合时使用
-	  leave: function (el, done) {
-	    // ...
-	    done()
-	  },
-	  afterLeave: function (el) {
-	    // ...
-	  },
-	  // leaveCancelled 只用于 v-show 中
-	  leaveCancelled: function (el) {
 	    // ...
 	  }
 	}
@@ -251,7 +251,14 @@ export default {
 		 		bottom: 22px
 		 		z-index: 200
 		 		&.drop-enter-active
-		 			transition: all .4s linear
+		 			transition: all .4s cubic-bezier(.53,0,.83,.67)
+		 			.inner
+		 				width: 16px
+		 				height: 16px
+		 				border-radius: 50%
+		 				background: rgb(0, 160, 220)
+		 				transition: all .4s linear
+
 		 			
 
 
