@@ -16,7 +16,7 @@
 	</div>
 	<div class="balls-wrapper">
 		<transition-group name="drop" tag="div" v-on:before-enter="beforeEnter"
-  v-on:enter="enter" v-on:after-enter="afterEnter" v-on:enter-cancelled="enterCancelled">
+  @enter="enter" @after-enter="afterEnter">
 			<div v-for="(ball, index) in balls" :key="index" v-show="ball.show" class="ball">
 				<div class="inner inner-hook"></div>
 			</div>
@@ -102,7 +102,6 @@ export default {
 	},
 	methods: {
 		drop (el) {
-			// console.log(el)
 			for (let i = 0; i < this.balls.length; i++) {
 				let ball = this.balls[i]
 				if (!ball.show) {
@@ -137,21 +136,16 @@ export default {
 					})
 				}
 			}
-	    // ...
 	  },
 	  enter: function (el, done) {
 	    done()
 	  },
 	  afterEnter: function (el) {
-console.log(el)
       let ball = this.dropBalls.shift()
 	    if (ball) {
 	      ball.show = false
 	      el.style.display = 'none'
       }
-	  },
-	  enterCancelled: function (el) {
-	    // ...
 	  }
 	}
 }
