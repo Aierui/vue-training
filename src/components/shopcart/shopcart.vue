@@ -15,7 +15,14 @@
 		<div class="pay" :class="payClass">{{ payDesc }}</div>
 	</div>
 	<div class="balls-wrapper">
-		<transition-group name="drop" tag="div">
+		<transition-group name="drop" tag="div" v-on:before-enter="beforeEnter"
+  v-on:enter="enter"
+  v-on:after-enter="afterEnter"
+  v-on:enter-cancelled="enterCancelled"
+  v-on:before-leave="beforeLeave"
+  v-on:leave="leave"
+  v-on:after-leave="afterLeave"
+  v-on:leave-cancelled="leaveCancelled">
 			<div v-for="(ball, index) in balls" :key="index" v-show="ball.show" class="ball">
 				<div class="inner"></div>
 			</div>
@@ -46,7 +53,8 @@ export default {
 				{
 					show: false
 				}
-			]
+			],
+			dropBalls: []
 		}
 	},
 	props: {
@@ -101,7 +109,50 @@ export default {
 	methods: {
 		drop (el) {
 			// console.log(el)
-		}
+			for (let i = 0; i < this.balls.length; i++) {
+				let ball = this.balls[i]
+				if (!ball.show) {
+					ball.show = true
+					ball.el = el
+					this.dropBalls.push(ball)
+					return
+				}
+			}
+		},
+		beforeEnter: function (el) {
+	    // ...
+	  },
+	  // 此回调函数是可选项的设置
+	  // 与 CSS 结合时使用
+	  enter: function (el, done) {
+	    // ...
+	    done()
+	  },
+	  afterEnter: function (el) {
+	    // ...
+	  },
+	  enterCancelled: function (el) {
+	    // ...
+	  },
+	  // --------
+	  // 离开时
+	  // --------
+	  beforeLeave: function (el) {
+	    // ...
+	  },
+	  // 此回调函数是可选项的设置
+	  // 与 CSS 结合时使用
+	  leave: function (el, done) {
+	    // ...
+	    done()
+	  },
+	  afterLeave: function (el) {
+	    // ...
+	  },
+	  // leaveCancelled 只用于 v-show 中
+	  leaveCancelled: function (el) {
+	    // ...
+	  }
 	}
 }
 </script>
@@ -193,15 +244,15 @@ export default {
 	 				color: #fff
 	 			&.not-enough
 	 				background: #2b333b
-	 	// .balls-wrapper
-	 	// 	.ball
-		 // 		position: fixed
-		 // 		left: 32px
-		 // 		bottom: 22px
-		 // 		z-index: 200
-		 // 		&.drop-enter-active
-		 // 			transition: all .4s
-		 // 			.inner
+	 	.balls-wrapper
+	 		.ball
+		 		position: fixed
+		 		left: 32px
+		 		bottom: 22px
+		 		z-index: 200
+		 		&.drop-enter-active
+		 			transition: all .4s linear
+		 			
 
 
 			
