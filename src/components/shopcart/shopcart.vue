@@ -15,7 +15,7 @@
 		<div class="pay" :class="payClass">{{ payDesc }}</div>
 	</div>
 	<div class="balls-wrapper">
-		<transition-group name="drop" tag="div" v-on:before-enter="beforeEnter"
+		<transition-group name="drop" tag="div" @before-enter="beforeEnter"
   @enter="enter" @after-enter="afterEnter">
 			<div v-for="(ball, index) in balls" :key="index" v-show="ball.show" class="ball">
 				<div class="inner inner-hook"></div>
@@ -245,7 +245,7 @@ export default {
 		 		bottom: 22px
 		 		z-index: 200
 		 		&.drop-enter-active
-		 			transition: all .4s cubic-bezier(.53,0,.83,.67)
+		 			transition: all .4s cubic-bezier(.17,0,.41,0)
 		 			.inner
 		 				width: 16px
 		 				height: 16px

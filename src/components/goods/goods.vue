@@ -139,7 +139,7 @@ export default {
 		},
 		_drop ($event) {
 			// 优化小球下落
-			this.$nextTick(() => {
+			this.$nextTick(function() {
 				this.$refs.shopcart.drop($event)
 			})
 		}
