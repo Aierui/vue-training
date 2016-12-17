@@ -29,7 +29,7 @@
 								<span class="old" v-if="food.oldPrice">¥{{food.oldPrice}}</span>
 							</div>
 							<div class="cartcontrol-wrapper">
-								<cartcontrol :food="food"></cartcontrol>
+								<cartcontrol :food="food" @add-cart="_drop($event)"></cartcontrol>
 							</div>	
 						</div>
 					</li>
@@ -37,7 +37,7 @@
 			</li>
 		</ul>
 	</div>
-	<shopcart ref="shopcart" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" @add-cart="_drop($event)"></shopcart>
+	<shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
 </div>
 
 </template>
@@ -46,8 +46,6 @@
 import BScroll from 'better-scroll'
 import shopcart from 'components/shopcart/shopcart'
 import cartcontrol from 'components/cartcontrol/cartcontrol'
-// import Vue from 'vue'
-// let eventHub = new Vue()
 const ERR_OK = 0
 export default {
 	props: {
@@ -75,7 +73,7 @@ export default {
     })
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     // 监听add-cart
-    // this.$on('add-cart', this._drop)
+    this.$on('add-cart', this._drop)
 	},
 	computed: {
 		currentIndex() {
@@ -87,10 +85,24 @@ export default {
 				}
 			}
 			return 0
+		},
+		selectFoods () {
+			let foods = []
+				this.goods.forEach((good) => {
+					good.foods.forEach((food) => {
+						// console.log(food.price)
+						// console.log(food.count)
+						if (food.count) {
+							foods.push(food)
+						}
+					})
+				})
+				// console.log(foods)
+				return foods
 		}
 	},
 	beforeDestroy () {
-		// this.$off('add-cart', this._drop)
+		this.$off('add-cart', this._drop)
 	},
 	methods: {
 		selectMenu (index, $event) {
@@ -126,9 +138,8 @@ export default {
 		  }
 		},
 		_drop ($event) {
-			console.log($event)
-			this.$refs.shopcart.drop($event.target)
-				// console.log($event)
+			// console.log($event)
+			this.$refs.shopcart.drop($event)
 		}
 	},
 	components: {

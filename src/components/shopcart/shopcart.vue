@@ -100,7 +100,7 @@ export default {
 	},
 	methods: {
 		drop (el) {
-			console.log(el)
+			// console.log(el)
 		}
 	}
 }
