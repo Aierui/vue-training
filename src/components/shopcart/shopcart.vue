@@ -22,15 +22,17 @@
 			</div>
 		</transition-group>
 	</div>
+
+	<transition name="flod">
 	<div class="shop-list" v-show="listShow">
 		<div class="list-header">
-			<h1 class="name">购物车</h1>
+			<h1 class="title">购物车</h1>
 			<span class="empty">清空</span>
 		</div>
 		<div class="list-content">
 			<ul>
 				<li v-for="food in selectFoods" class="food">
-					<span class="name">{{}}</span>
+					<span class="name">{{food.name}}</span>
 					<div class="price">
 						<span>¥{{food.price*food.count}}</span>
 					</div>
@@ -41,6 +43,9 @@
 			</ul>
 		</div>
 	</div>
+	</transition>
+
+
 </div>
 </div>
   
@@ -294,6 +299,37 @@ export default {
 		 				border-radius: 50%
 		 				background: rgb(0, 160, 220)
 		 				transition: all .4s linear
+		.shop-list
+			position: absolute
+			left: 0
+			top: 0
+			width: 100%
+			z-index: -1
+			&.flod-enter-active, $.flod-leave
+				transition: all .5s
+				transform: translate3d(0,-100%,0)
+			&.flod-enter, &.flod-leave-active
+				transform: translate3d(0, 0, 0)
+			.list-header
+				height: 40px
+				line-height: 40px
+				padding: 0 18px
+				background: #f3f5f7
+				border-bottom: 1px solid rgba(7, 17, 27, .1)
+				.title
+					float: left
+					font-size: 14px
+					color: #07111b
+				.empty
+					float: right
+					font-size: 12px
+					color: #00a0dc
+			.list-content
+				padding: 0 18px
+				max-height: 217px
+				overflow: hidden
+				background: #fff
+
 
 		 			
 
