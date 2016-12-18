@@ -22,12 +22,32 @@
 			</div>
 		</transition-group>
 	</div>
+	<div class="shop-list" v-show="listShow">
+		<div class="list-header">
+			<h1 class="name">购物车</h1>
+			<span class="empty">清空</span>
+		</div>
+		<div class="list-content">
+			<ul>
+				<li v-for="food in selectFoods" class="food">
+					<span class="name">{{}}</span>
+					<div class="price">
+						<span>¥{{food.price*food.count}}</span>
+					</div>
+					<div class="cartcontrol-wrapper">
+						<cartcontrol :food="food"></cartcontrol>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
 </div>
   
 </template>
 
 <script type="text/ecmascript-6">
+import cartcontrol from 'components/cartcontrol/cartcontrol'
 export default {
 	data() {
 		return {
@@ -48,7 +68,8 @@ export default {
 					show: false
 				}
 			],
-			dropBalls: []
+			dropBalls: [],
+			listShow: false
 		}
 	},
 	props: {
@@ -127,17 +148,20 @@ export default {
 					let inner = el.getElementsByClassName('inner-hook')[0]
 					inner.style.transform = `translate3d(${x}px, 0, 0)`
 					inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`
-					this.$nextTick(function() {
-								el.style.transform = 'translate3d(0, 0, 0)'
-								el.style.webkitTransform = 'translate3d(0, 0, 0)'
-								let inner = el.getElementsByClassName('inner-hook')[0]
-								inner.style.transform = 'translate3d(0, 0, 0)'
-								inner.style.webkitTransform = 'translate3d(0, 0, 0)'
-					})
 				}
 			}
 	  },
 	  enter: function (el, done) {
+			/* eslint-disable no-unused-vars */
+	    let rf = el.offsetHeight
+	    console.log(rf)
+			this.$nextTick(function() {
+						el.style.transform = 'translate3d(0, 0, 0)'
+						el.style.webkitTransform = 'translate3d(0, 0, 0)'
+						let inner = el.getElementsByClassName('inner-hook')[0]
+						inner.style.transform = 'translate3d(0, 0, 0)'
+						inner.style.webkitTransform = 'translate3d(0, 0, 0)'
+			})
 	    done()
 	  },
 	  afterEnter: function (el) {
@@ -147,6 +171,9 @@ export default {
 	      el.style.display = 'none'
       }
 	  }
+	},
+	components: {
+		cartcontrol
 	}
 }
 </script>
