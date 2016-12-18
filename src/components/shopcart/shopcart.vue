@@ -1,6 +1,6 @@
 <template>
 <div class="shopcart">
-<div class="content">
+<div class="content" @click="toggleList">
 	<div class="content-left">
 		<div class="logo-wrapper">
 			<div class="logo" :class="{highlight: totalCount>0}">
@@ -69,7 +69,8 @@ export default {
 				}
 			],
 			dropBalls: [],
-			listShow: false
+			listShow: false,
+			flod: true
 		}
 	},
 	props: {
@@ -119,6 +120,14 @@ export default {
 			} else {
 				return 'enough'
 			}
+		},
+		listShow() {
+			if (!this.totalCount) {
+				this.flod = true
+				return false
+			}
+			let show = !this.flod
+			return show
 		}
 	},
 	methods: {
@@ -170,6 +179,12 @@ export default {
 	      ball.show = false
 	      el.style.display = 'none'
       }
+	  },
+	  toggleList() {
+      if (!this.totalCount) {
+        return
+      }
+      this.flod = !this.flod
 	  }
 	},
 	components: {
