@@ -1,57 +1,59 @@
 <template>
 <div class="shopcart">
-<div class="content" @click="toggleList">
-	<div class="content-left">
-		<div class="logo-wrapper">
-			<div class="logo" :class="{highlight: totalCount>0}">
-				<span class="icon-shopping_cart" :class="{highlight: totalCount>0}"></span>
+	<div class="content" @click="toggleList">
+		<div class="content-left">
+			<div class="logo-wrapper">
+				<div class="logo" :class="{highlight: totalCount>0}">
+					<span class="icon-shopping_cart" :class="{highlight: totalCount>0}"></span>
+				</div>
+				<div v-show="totalCount > 0" class="num">{{ totalCount }}</div>
 			</div>
-			<div v-show="totalCount > 0" class="num">{{ totalCount }}</div>
+			<div class="price" :class="{highlight: totalPrice>0}">¥{{ totalPrice }}</div>
+			<div class="desc">另需配送费￥{{ deliveryPrice }}元</div>
 		</div>
-		<div class="price" :class="{highlight: totalPrice>0}">¥{{ totalPrice }}</div>
-		<div class="desc">另需配送费￥{{ deliveryPrice }}元</div>
-	</div>
-	<div class="content-right">
-		<div class="pay" :class="payClass">{{ payDesc }}</div>
-	</div>
-	<div class="balls-wrapper">
-		<transition-group name="drop" tag="div" @before-enter="beforeEnter"
-  @enter="enter" @after-enter="afterEnter">
-			<div v-for="(ball, index) in balls" :key="index" v-show="ball.show" class="ball">
-				<div class="inner inner-hook"></div>
+		<div class="content-right">
+			<div class="pay" :class="payClass">{{ payDesc }}</div>
+		</div>
+		<div class="balls-wrapper">
+			<transition-group name="drop" tag="div" @before-enter="beforeEnter"
+	  @enter="enter" @after-enter="afterEnter">
+				<div v-for="(ball, index) in balls" :key="index" v-show="ball.show" class="ball">
+					<div class="inner inner-hook"></div>
+				</div>
+			</transition-group>
+		</div>
+
+		<transition name="flod">
+		<div class="shop-list" v-show="listShow">
+			<div class="list-header">
+				<h1 class="title">购物车</h1>
+				<span class="empty" @click="empty">清空</span>
 			</div>
-		</transition-group>
+			<div class="list-content" ref="listContent">
+				<ul>
+					<li v-for="food in selectFoods" class="food">
+						<span class="name">{{food.name}}</span>
+						<div class="price">
+							<span>¥{{food.price*food.count}}</span>
+						</div>
+						<div class="cartcontrol-wrapper">
+							<cartcontrol :food="food"></cartcontrol>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		</transition>
 	</div>
 
-	<transition name="flod">
-	<div class="shop-list" v-show="listShow">
-		<div class="list-header">
-			<h1 class="title">购物车</h1>
-			<span class="empty">清空</span>
-		</div>
-		<div class="list-content">
-			<ul>
-				<li v-for="food in selectFoods" class="food">
-					<span class="name">{{food.name}}</span>
-					<div class="price">
-						<span>¥{{food.price*food.count}}</span>
-					</div>
-					<div class="cartcontrol-wrapper">
-						<cartcontrol :food="food"></cartcontrol>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</div>
+	<transition name="fade">
+		<div class="list-mask" v-show="listShow"></div>
 	</transition>
-
-
-</div>
-</div>
-  
 </template>
+</div>
 
 <script type="text/ecmascript-6">
+import BScroll from 'better-scroll'
 import cartcontrol from 'components/cartcontrol/cartcontrol'
 export default {
 	data() {
@@ -132,6 +134,17 @@ export default {
 				return false
 			}
 			let show = !this.flod
+			if (show) {
+				this.$nextTick(function() {
+					if (!this.scroll) {
+						this.scroll = new BScroll(this.$refs.listContent, {
+							click: true
+						})
+					} else {
+						this.scroll.refresh()
+					}
+				})
+			}
 			return show
 		}
 	},
@@ -162,6 +175,13 @@ export default {
 					let inner = el.getElementsByClassName('inner-hook')[0]
 					inner.style.transform = `translate3d(${x}px, 0, 0)`
 					inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`
+					this.$nextTick(function() {
+								el.style.transform = 'translate3d(0, 0, 0)'
+								el.style.webkitTransform = 'translate3d(0, 0, 0)'
+								let inner = el.getElementsByClassName('inner-hook')[0]
+								inner.style.transform = 'translate3d(0, 0, 0)'
+								inner.style.webkitTransform = 'translate3d(0, 0, 0)'
+					})
 				}
 			}
 	  },
@@ -169,13 +189,6 @@ export default {
 			/* eslint-disable no-unused-vars */
 	    let rf = el.offsetHeight
 	    console.log(rf)
-			this.$nextTick(function() {
-						el.style.transform = 'translate3d(0, 0, 0)'
-						el.style.webkitTransform = 'translate3d(0, 0, 0)'
-						let inner = el.getElementsByClassName('inner-hook')[0]
-						inner.style.transform = 'translate3d(0, 0, 0)'
-						inner.style.webkitTransform = 'translate3d(0, 0, 0)'
-			})
 	    done()
 	  },
 	  afterEnter: function (el) {
@@ -190,6 +203,11 @@ export default {
         return
       }
       this.flod = !this.flod
+	  },
+	  empty() {
+      this.selectFoods.forEach(function(food) {
+	      food.count = 0
+      })
 	  }
 	},
 	components: {
@@ -199,7 +217,7 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
- .shopcart
+.shopcart
  	position: fixed
  	left: 0
  	bottom: 0
@@ -305,11 +323,11 @@ export default {
 			top: 0
 			width: 100%
 			z-index: -1
-			&.flod-enter-active, $.flod-leave
-				transition: all .5s
-				transform: translate3d(0,-100%,0)
-			&.flod-enter, &.flod-leave-active
-				transform: translate3d(0, 0, 0)
+			// &.flod-enter-active, $.flod-leave
+			transition: all .5s
+			transform: translate3d(0,-100%,0)
+			// &.flod-enter, &.flod-leave-active
+			// 	transform: translate3d(0, 0, 0)
 			.list-header
 				height: 40px
 				line-height: 40px
@@ -329,9 +347,41 @@ export default {
 				max-height: 217px
 				overflow: hidden
 				background: #fff
+				.food
+					position: relative
+					padding: 12px 0
+					box-sizing: border-box
+					.name
+						line-height: 24px
+						font-size: 14px
+						color: #07111b
+					.price
+						position: absolute
+						right: 90px
+						bottom: 12px
+						line-height: 24px
+						font-size: 14px
+						font-weight: 700
+						color: #f01414
+					.cartcontrol-wrapper
+						position: absolute
+						right: 0
+						bottom: 6px
+	.list-mask
+		position: fixed
+		left: 0
+		top: 0
+		width: 100%
+		height: 100%
+		z-index: 50
+		&.fade-enter-active, &.fade-leave
+			opacity: 1
+			transition: all .5s
+			background: rgba(7, 17, 27, .6)
+		&.fade-enter, &.fade-leave-active
+			opacity: 0
+			background: rgba(7, 17, 27, 0)
 
-
-		 			
 
 
 			
