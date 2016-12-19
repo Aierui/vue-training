@@ -15,14 +15,18 @@
 			<div class="pay" :class="payClass">{{ payDesc }}</div>
 		</div>
 		<div class="balls-wrapper">
-			<transition-group name="drop" tag="div" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+			<transition-group name="drop" tag="div" 
+			appear
+			@before-enter="beforeEnter" 
+			@enter="enter" 
+			@after-enter="afterEnter">
 				<div v-for="(ball, index) in balls" :key="index" v-show="ball.show" class="ball">
 					<div class="inner inner-hook"></div>
 				</div>
 			</transition-group>
 		</div>
 
-		<transition name="flod">
+		<transition name="flod" mode="out-in">
 		<div class="shop-list" v-show="listShow">
 			<div class="list-header">
 				<h1 class="title">购物车</h1>
@@ -174,24 +178,23 @@ export default {
 					let inner = el.getElementsByClassName('inner-hook')[0]
 					inner.style.transform = `translate3d(${x}px, 0, 0)`
 					inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`
-					this.$nextTick(function() {
-						el.style.transform = 'translate3d(0, 0, 0)'
-						el.style.webkitTransform = 'translate3d(0, 0, 0)'
-						let inner = el.getElementsByClassName('inner-hook')[0]
-						inner.style.transform = 'translate3d(0, 0, 0)'
-						inner.style.webkitTransform = 'translate3d(0, 0, 0)'
-					})
 				}
 			}
 	  },
 	  enter: function (el) {
-	console.log('enter')
+// this.$nextTick(function() {
+	el.style.transform = 'translate3d(0, 0, 0)'
+	el.style.webkitTransform = 'translate3d(0, 0, 0)'
+	let inner = el.getElementsByClassName('inner-hook')[0]
+	inner.style.transform = 'translate3d(0, 0, 0)'
+	inner.style.webkitTransform = 'translate3d(0, 0, 0)'
+// })
 			/* eslint-disable no-unused-vars */
 	    let rf = el.offsetHeight
-	    // console.log(el)
+	    console.log(el)
 	  },
 	  afterEnter: function (el) {
-	console.log('afterEnter')
+	// console.log('afterEnter')
       let ball = this.dropBalls.shift()
 	    if (ball) {
 	      ball.show = false
