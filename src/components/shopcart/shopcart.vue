@@ -323,11 +323,11 @@ export default {
 			top: 0
 			width: 100%
 			z-index: -1
-			.flod-enter-active
-				transition: all .5s
-				transform: translate3d(0,-100%,0)
-			.flod-leave-active
-				transform: translate3d(0, 0, 0)
+		.flod-enter-active
+			transition: all .5s
+			transform: translate3d(0,-100%,0)
+		.flod-leave-active
+			transform: translate3d(0, 0, 0)
 			.list-header
 				height: 40px
 				line-height: 40px
