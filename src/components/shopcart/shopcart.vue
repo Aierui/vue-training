@@ -16,7 +16,6 @@
 		</div>
 		<div class="balls-wrapper">
 			<transition-group name="drop" tag="div" 
-			appear
 			@before-enter="beforeEnter" 
 			@enter="enter" 
 			@after-enter="afterEnter">
@@ -153,23 +152,32 @@ export default {
 	},
 	methods: {
 		drop (el) {
-			for (let i = 0; i < this.balls.length; i++) {
-				let ball = this.balls[i]
-				if (!ball.show) {
-					ball.show = true
-					ball.el = el
-					this.dropBalls.push(ball)
-					return
-				}
-			}
+			let i = 0
+			this.$on('add-cart', el => {
+				this.$nextTick(function() {
+					while (i < this.balls.length) {
+						i++
+						if (i >= this.balls.length) {
+							i = 0
+						}
+					}
+					let ball = this.balls[i]
+					if (!ball.show) {
+						ball.show = true
+						ball.el = el
+						this.dropBalls.push(ball)
+						return
+					}
+				})
+			})
 		},
 		beforeEnter: function (el) {
+			console.log('beforeEnter')
 			let count = this.balls.length
 			while (count--) {
 				let ball = this.balls[count]
 				if (ball.show) {
 					let rect = ball.el.getBoundingClientRect()
-					// console.log(rect)
 					let x = rect.left - 32
 					let y = -(window.innerHeight - rect.top - 22)
 					el.style.display = ''
@@ -181,20 +189,23 @@ export default {
 				}
 			}
 	  },
-	  enter: function (el) {
-// this.$nextTick(function() {
-	el.style.transform = 'translate3d(0, 0, 0)'
-	el.style.webkitTransform = 'translate3d(0, 0, 0)'
-	let inner = el.getElementsByClassName('inner-hook')[0]
-	inner.style.transform = 'translate3d(0, 0, 0)'
-	inner.style.webkitTransform = 'translate3d(0, 0, 0)'
-// })
+	  enter: function (el, done) {
+	console.log('enter')
 			/* eslint-disable no-unused-vars */
 	    let rf = el.offsetHeight
-	    console.log(el)
+			this.$nextTick(function() {
+				setTimeout(function() {
+					el.style.transform = 'translate3d(0, 0, 0)'
+					el.style.webkitTransform = 'translate3d(0, 0, 0)'
+					let inner = el.getElementsByClassName('inner-hook')[0]
+					inner.style.transform = 'translate3d(0, 0, 0)'
+					inner.style.webkitTransform = 'translate3d(0, 0, 0)'
+				})
+			})
+			done()
 	  },
 	  afterEnter: function (el) {
-	// console.log('afterEnter')
+	console.log('afterEnter')
       let ball = this.dropBalls.shift()
 	    if (ball) {
 	      ball.show = false
@@ -314,12 +325,12 @@ export default {
 		 		z-index: 200
 		 		&.drop-enter-active
 		 			transition: all .4s cubic-bezier(.17,0,.41,0)
-		 			.inner
-		 				width: 16px
-		 				height: 16px
-		 				border-radius: 50%
-		 				background: rgb(0, 160, 220)
-		 				transition: all .4s linear
+	 			.inner
+	 				width: 16px
+	 				height: 16px
+	 				border-radius: 50%
+	 				background: rgb(0, 160, 220)
+	 				transition: all .4s linear
 		.shop-list
 			position: absolute
 			left: 0
