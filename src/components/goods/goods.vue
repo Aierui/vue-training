@@ -30,7 +30,7 @@
 							</div>
 							<div class="cartcontrol-wrapper">
 								<cartcontrol :food="food" @add-cart="_drop($event)"></cartcontrol>
-							</div>	
+							</div>
 						</div>
 					</li>
 				</ul>
@@ -256,5 +256,5 @@ export default {
 						bottom: 12px
 
 
- 
+
 </style>

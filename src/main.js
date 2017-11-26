@@ -20,6 +20,8 @@ const router = new VueRouter({
   routes: routes
 })
 
+console.log(App)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
